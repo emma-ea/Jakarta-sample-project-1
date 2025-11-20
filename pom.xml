@@ -92,6 +92,7 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <skip>true</skip>
                     <images>
                         <image>
                             <name>${project.artifactId}:${project.version}</name>
@@ -111,6 +112,7 @@
                             <goal>wget</goal>
                         </goals>
                         <configuration>
+                            <skip>true</skip>
                             <skipCache>true</skipCache>
                             <url>https://github.com/swagger-api/swagger-ui/archive/master.tar.gz</url>
                             <unpack>true</unpack>
