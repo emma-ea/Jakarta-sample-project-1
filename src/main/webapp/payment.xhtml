@@ -1,0 +1,60 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                xmlns:h="jakarta.faces.html"
+                template="/WEB-INF/layout/template.xhtml">
+
+    <ui:define name="content">
+        <h3>Payment</h3>
+        <p>Represents payment transactions related to bids.</p>
+        <h:panelGrid columns="2" columnClasses="label,value" styleClass="table-form">
+
+            <h:outputLabel for="amount" value="Amount:" />
+            <h:inputText id="amount" value="#{paymentBean.payment.amount}" >
+                <f:passThroughAttribute name="type" value="number" />
+            </h:inputText>
+
+            <h:outputLabel for="paymentDate" value="Payment Date:" />
+            <h:inputText id="paymentDate" 
+                         value="#{paymentBean.payment.paymentDate}" 
+                         converter="localDateConverter">
+                <f:passThroughAttribute name="type" value="date" />
+            </h:inputText>
+
+            <h:outputLabel for="method" value="Method:" />
+            <h:inputText id="method" value="#{paymentBean.payment.method}" />
+        </h:panelGrid>
+        <h:inputHidden id="paymentId" 
+                       value="#{paymentBean.payment.paymentId}" />
+
+        <h:commandButton value="Save" action="#{paymentBean.save}" styleClass="btn btn-primary mt-3" />
+
+        <h3 class="mt-5">Payment List</h3>
+        <h:dataTable value="#{paymentBean.allPayments}" var="payment" border="1" styleClass="table table-striped table-bordered">
+            <h:column>
+                <f:facet name="header">Payment Id</f:facet>
+                #{payment.paymentId}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Amount</f:facet>
+                #{payment.amount}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Payment Date</f:facet>
+                #{payment.paymentDate}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Method</f:facet>
+                #{payment.method}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Actions</f:facet>
+                <h:commandLink value="Edit" action="#{paymentBean.edit(payment)}" styleClass="btn btn-link p-0" />
+                |
+                <h:commandLink value="Delete" action="#{paymentBean.remove(payment.paymentId)}"
+                               onclick="return confirm('Delete this payment?');" 
+                               styleClass="btn btn-link p-0 text-danger" />
+            </h:column>
+        </h:dataTable>
+    </ui:define>
+</ui:composition>

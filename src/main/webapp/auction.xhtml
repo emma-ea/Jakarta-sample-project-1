@@ -1,0 +1,69 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                xmlns:h="jakarta.faces.html"
+                template="/WEB-INF/layout/template.xhtml">
+
+    <ui:define name="content">
+        <h3>Auction</h3>
+        <p>Represents an auction event where items are sold to highest bidders.</p>
+        <h:panelGrid columns="2" columnClasses="label,value" styleClass="table-form">
+
+            <h:outputLabel for="name" value="Name:" />
+            <h:inputText id="name" value="#{auctionBean.auction.name}" />
+
+            <h:outputLabel for="startDate" value="Start Date:" />
+            <h:inputText id="startDate" 
+                         value="#{auctionBean.auction.startDate}" 
+                         converter="localDateConverter">
+                <f:passThroughAttribute name="type" value="date" />
+            </h:inputText>
+
+            <h:outputLabel for="endDate" value="End Date:" />
+            <h:inputText id="endDate" 
+                         value="#{auctionBean.auction.endDate}" 
+                         converter="localDateConverter">
+                <f:passThroughAttribute name="type" value="date" />
+            </h:inputText>
+
+            <h:outputLabel for="status" value="Status:" />
+            <h:inputText id="status" value="#{auctionBean.auction.status}" />
+        </h:panelGrid>
+        <h:inputHidden id="auctionId" 
+                       value="#{auctionBean.auction.auctionId}" />
+
+        <h:commandButton value="Save" action="#{auctionBean.save}" styleClass="btn btn-primary mt-3" />
+
+        <h3 class="mt-5">Auction List</h3>
+        <h:dataTable value="#{auctionBean.allAuctions}" var="auction" border="1" styleClass="table table-striped table-bordered">
+            <h:column>
+                <f:facet name="header">Auction Id</f:facet>
+                #{auction.auctionId}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Name</f:facet>
+                #{auction.name}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Start Date</f:facet>
+                #{auction.startDate}
+            </h:column>
+            <h:column>
+                <f:facet name="header">End Date</f:facet>
+                #{auction.endDate}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Status</f:facet>
+                #{auction.status}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Actions</f:facet>
+                <h:commandLink value="Edit" action="#{auctionBean.edit(auction)}" styleClass="btn btn-link p-0" />
+                |
+                <h:commandLink value="Delete" action="#{auctionBean.remove(auction.auctionId)}"
+                               onclick="return confirm('Delete this auction?');" 
+                               styleClass="btn btn-link p-0 text-danger" />
+            </h:column>
+        </h:dataTable>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,93 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                xmlns:h="jakarta.faces.html"
+                template="/WEB-INF/layout/template.xhtml">
+
+    <ui:define name="content">
+        <h3>Item</h3>
+        <p>Represents an item available for bidding in an auction.</p>
+        <h:panelGrid columns="2" columnClasses="label,value" styleClass="table-form">
+
+            <h:outputLabel for="name" value="Name:" />
+            <h:inputText id="name" value="#{itemBean.item.name}" />
+
+            <h:outputLabel for="description" value="Description:" />
+            <h:inputText id="description" value="#{itemBean.item.description}" />
+
+            <h:outputLabel for="startingPrice" value="Starting Price:" />
+            <h:inputText id="startingPrice" value="#{itemBean.item.startingPrice}" >
+                <f:passThroughAttribute name="type" value="number" />
+            </h:inputText>
+
+            <h:outputLabel for="category" value="Category:" />
+            <h:inputText id="category" value="#{itemBean.item.category}" />
+
+            <h:outputLabel for="shipping" value="Shipping:" />
+            <h:selectOneMenu id="shipping"
+                             value="#{itemBean.item.shipping}"
+                             converter="shippingConverter">
+                <f:selectItem itemLabel="Select Shipping" noSelectionOption="true" />
+                <f:selectItems value="#{shippingBean.allShippings}"
+                               var="shipping"
+                               itemValue="#{shipping}"
+                               itemLabel="#{shipping}" />
+            </h:selectOneMenu>
+
+            <h:outputLabel for="auction" value="Auction:" />
+            <h:selectOneMenu id="auction"
+                             value="#{itemBean.item.auction}"
+                             converter="auctionConverter">
+                <f:selectItem itemLabel="Select Auction" noSelectionOption="true" />
+                <f:selectItems value="#{auctionBean.allAuctions}"
+                               var="auction"
+                               itemValue="#{auction}"
+                               itemLabel="#{auction}" />
+            </h:selectOneMenu>
+        </h:panelGrid>
+        <h:inputHidden id="itemId" 
+                       value="#{itemBean.item.itemId}" />
+
+        <h:commandButton value="Save" action="#{itemBean.save}" styleClass="btn btn-primary mt-3" />
+
+        <h3 class="mt-5">Item List</h3>
+        <h:dataTable value="#{itemBean.allItems}" var="item" border="1" styleClass="table table-striped table-bordered">
+            <h:column>
+                <f:facet name="header">Item Id</f:facet>
+                #{item.itemId}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Name</f:facet>
+                #{item.name}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Description</f:facet>
+                #{item.description}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Starting Price</f:facet>
+                #{item.startingPrice}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Category</f:facet>
+                #{item.category}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Shipping</f:facet>
+                #{item.shipping}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Auction</f:facet>
+                #{item.auction}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Actions</f:facet>
+                <h:commandLink value="Edit" action="#{itemBean.edit(item)}" styleClass="btn btn-link p-0" />
+                |
+                <h:commandLink value="Delete" action="#{itemBean.remove(item.itemId)}"
+                               onclick="return confirm('Delete this item?');" 
+                               styleClass="btn btn-link p-0 text-danger" />
+            </h:column>
+        </h:dataTable>
+    </ui:define>
+</ui:composition>

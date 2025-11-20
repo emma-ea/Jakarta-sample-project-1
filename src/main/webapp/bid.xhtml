@@ -1,0 +1,83 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                xmlns:h="jakarta.faces.html"
+                template="/WEB-INF/layout/template.xhtml">
+
+    <ui:define name="content">
+        <h3>Bid</h3>
+        <p>Represents a bid placed by a bidder on an auction item.</p>
+        <h:panelGrid columns="2" columnClasses="label,value" styleClass="table-form">
+
+            <h:outputLabel for="amount" value="Amount:" />
+            <h:inputText id="amount" value="#{bidBean.bid.amount}" >
+                <f:passThroughAttribute name="type" value="number" />
+            </h:inputText>
+
+            <h:outputLabel for="bidTime" value="Bid Time:" />
+            <h:inputText id="bidTime" 
+                         value="#{bidBean.bid.bidTime}" 
+                         converter="localDateConverter">
+                <f:passThroughAttribute name="type" value="date" />
+            </h:inputText>
+
+            <h:outputLabel for="payment" value="Payment:" />
+            <h:selectOneMenu id="payment"
+                             value="#{bidBean.bid.payment}"
+                             converter="paymentConverter">
+                <f:selectItem itemLabel="Select Payment" noSelectionOption="true" />
+                <f:selectItems value="#{paymentBean.allPayments}"
+                               var="payment"
+                               itemValue="#{payment}"
+                               itemLabel="#{payment}" />
+            </h:selectOneMenu>
+
+            <h:outputLabel for="bidder" value="Bidder:" />
+            <h:selectOneMenu id="bidder"
+                             value="#{bidBean.bid.bidder}"
+                             converter="bidderConverter">
+                <f:selectItem itemLabel="Select Bidder" noSelectionOption="true" />
+                <f:selectItems value="#{bidderBean.allBidders}"
+                               var="bidder"
+                               itemValue="#{bidder}"
+                               itemLabel="#{bidder}" />
+            </h:selectOneMenu>
+        </h:panelGrid>
+        <h:inputHidden id="bidId" 
+                       value="#{bidBean.bid.bidId}" />
+
+        <h:commandButton value="Save" action="#{bidBean.save}" styleClass="btn btn-primary mt-3" />
+
+        <h3 class="mt-5">Bid List</h3>
+        <h:dataTable value="#{bidBean.allBids}" var="bid" border="1" styleClass="table table-striped table-bordered">
+            <h:column>
+                <f:facet name="header">Bid Id</f:facet>
+                #{bid.bidId}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Amount</f:facet>
+                #{bid.amount}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Bid Time</f:facet>
+                #{bid.bidTime}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Payment</f:facet>
+                #{bid.payment}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Bidder</f:facet>
+                #{bid.bidder}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Actions</f:facet>
+                <h:commandLink value="Edit" action="#{bidBean.edit(bid)}" styleClass="btn btn-link p-0" />
+                |
+                <h:commandLink value="Delete" action="#{bidBean.remove(bid.bidId)}"
+                               onclick="return confirm('Delete this bid?');" 
+                               styleClass="btn btn-link p-0 text-danger" />
+            </h:column>
+        </h:dataTable>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,51 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                xmlns:h="jakarta.faces.html"
+                template="/WEB-INF/layout/template.xhtml">
+
+    <ui:define name="content">
+        <h3>Shipping</h3>
+        <p>Represents shipping details for delivered auction items.</p>
+        <h:panelGrid columns="2" columnClasses="label,value" styleClass="table-form">
+
+            <h:outputLabel for="deliveryDate" value="Delivery Date:" />
+            <h:inputText id="deliveryDate" 
+                         value="#{shippingBean.shipping.deliveryDate}" 
+                         converter="localDateConverter">
+                <f:passThroughAttribute name="type" value="date" />
+            </h:inputText>
+
+            <h:outputLabel for="trackingNumber" value="Tracking Number:" />
+            <h:inputText id="trackingNumber" value="#{shippingBean.shipping.trackingNumber}" />
+        </h:panelGrid>
+        <h:inputHidden id="shippingId" 
+                       value="#{shippingBean.shipping.shippingId}" />
+
+        <h:commandButton value="Save" action="#{shippingBean.save}" styleClass="btn btn-primary mt-3" />
+
+        <h3 class="mt-5">Shipping List</h3>
+        <h:dataTable value="#{shippingBean.allShippings}" var="shipping" border="1" styleClass="table table-striped table-bordered">
+            <h:column>
+                <f:facet name="header">Shipping Id</f:facet>
+                #{shipping.shippingId}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Delivery Date</f:facet>
+                #{shipping.deliveryDate}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Tracking Number</f:facet>
+                #{shipping.trackingNumber}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Actions</f:facet>
+                <h:commandLink value="Edit" action="#{shippingBean.edit(shipping)}" styleClass="btn btn-link p-0" />
+                |
+                <h:commandLink value="Delete" action="#{shippingBean.remove(shipping.shippingId)}"
+                               onclick="return confirm('Delete this shipping?');" 
+                               styleClass="btn btn-link p-0 text-danger" />
+            </h:column>
+        </h:dataTable>
+    </ui:define>
+</ui:composition>
