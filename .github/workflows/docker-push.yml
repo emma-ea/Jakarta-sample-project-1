@@ -30,6 +30,6 @@ jobs:
         with:
           context: . # Dockerfile
           push: true
-          tags: emma00ea/payara-app-sample:latest # image tag info 
+          tags: emma00ea/another-payara-app-sample:latest # image tag info 
 
 
